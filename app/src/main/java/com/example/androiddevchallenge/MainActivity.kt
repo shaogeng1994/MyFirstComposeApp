@@ -18,12 +18,26 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.androiddevchallenge.model.Puppy
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.theme.matcha
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +54,77 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        Scaffold(
+            Modifier
+                .background(color = MaterialTheme.colors.background)
+                .fillMaxSize(),
+            topBar = {
+                getTopBar(title = "Puppy")
+            },
+
+        ) {
+            Feed(feedItems = arrayListOf(
+                Puppy("Puppy", "", "", "", "2021/3/1"),
+                Puppy("Puppy", "", "", "", "2021/3/1"),
+                Puppy("Puppy", "", "", "", "2021/3/1"),
+                Puppy("Puppy", "", "", "", "2021/3/1")
+            ), onSelected = { /*TODO*/ })
+        }
+
+
     }
 }
+
+@Composable
+fun getTopBar(title: String) {
+    TopAppBar(
+        title = {
+            Text(title)
+        },
+        Modifier.fillMaxWidth(),
+        backgroundColor = matcha)
+}
+
+@Composable
+fun Feed(
+    feedItems: List<Puppy>,
+    onSelected: (Puppy) -> Unit
+) {
+    LazyColumn(
+        Modifier
+            .background(color = MaterialTheme.colors.background)
+            .padding(12.dp, 12.dp, 12.dp, 0.dp)
+            .fillMaxSize()
+    ) {
+        items(feedItems.size, itemContent = { index ->
+            PuppyItem(feedItems[index], onSelected)
+            Spacer(Modifier.size(12.dp))
+        })
+    }
+}
+
+@Composable
+fun PuppyItem(puppy: Puppy, onSelected: (Puppy) -> Unit) {
+    Column(
+        Modifier
+            .clickable(onClick = {
+                onSelected.invoke(puppy)
+            })
+            .clip(Shapes().small)
+            .background(color = Color.White)
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
+        Column() {
+            Text(text = puppy.name, fontSize = 16.sp, color = Color.Black)
+            Spacer(Modifier.size(6.dp))
+            Text(text = puppy.createTime, fontSize = 12.sp, color = Color.Gray)
+            Spacer(Modifier.size(6.dp))
+            Image(painter = painterResource(id = R.drawable.img1), "")
+        }
+    }
+}
+
 
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
