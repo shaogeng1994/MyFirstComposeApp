@@ -21,19 +21,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Shapes
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -72,12 +72,15 @@ fun MyApp(onSelected: (Puppy) -> Unit) {
             getTopBar(title = "Puppy Adoption")
         },
 
-        ) {
-        Feed(feedItems = arrayListOf(
-            Puppy("Harry", "unknown", "Active and cheerful", R.drawable.puppy1, "2021/3/1"),
-            Puppy("Jerry", "Kirky", "Lively and sticky", R.drawable.puppy2, "2021/2/19"),
-            Puppy("Katrina", "Husky", "Meekness", R.drawable.puppy3, "2021/2/1")
-        ), onSelected = onSelected)
+    ) {
+        Feed(
+            feedItems = arrayListOf(
+                Puppy("Harry", "unknown", "Active and cheerful", R.drawable.puppy1, "2021/3/1"),
+                Puppy("Jerry", "Kirky", "Lively and sticky", R.drawable.puppy2, "2021/2/19"),
+                Puppy("Katrina", "Husky", "Meekness", R.drawable.puppy3, "2021/2/1")
+            ),
+            onSelected = onSelected
+        )
     }
 }
 
@@ -87,7 +90,8 @@ fun getTopBar(title: String) {
         title = {
             Text(title)
         },
-        Modifier.fillMaxWidth())
+        Modifier.fillMaxWidth()
+    )
 }
 
 @Composable
@@ -101,10 +105,13 @@ fun Feed(
             .padding(12.dp, 12.dp, 12.dp, 0.dp)
             .fillMaxSize()
     ) {
-        items(feedItems.size, itemContent = { index ->
-            PuppyItem(feedItems[index], onSelected)
-            Spacer(Modifier.size(12.dp))
-        })
+        items(
+            feedItems.size,
+            itemContent = { index ->
+                PuppyItem(feedItems[index], onSelected)
+                Spacer(Modifier.size(12.dp))
+            }
+        )
     }
 }
 
@@ -112,9 +119,11 @@ fun Feed(
 fun PuppyItem(puppy: Puppy, onSelected: (Puppy) -> Unit) {
     Column(
         Modifier
-            .clickable(onClick = {
-                onSelected.invoke(puppy)
-            })
+            .clickable(
+                onClick = {
+                    onSelected.invoke(puppy)
+                }
+            )
             .clip(Shapes().small)
             .background(color = Color.White)
             .padding(10.dp)
@@ -136,13 +145,11 @@ fun PuppyItem(puppy: Puppy, onSelected: (Puppy) -> Unit) {
     }
 }
 
-
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LightPreview() {
     MyTheme {
         MyApp { puppy ->
-
         }
     }
 }
@@ -151,8 +158,7 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
-        MyApp{ puppy ->
-
+        MyApp { puppy ->
         }
     }
 }

@@ -18,33 +18,31 @@ package com.example.androiddevchallenge
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.Snackbar
-import androidx.compose.material.Surface
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Shapes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,11 +58,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.androiddevchallenge.model.Puppy
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.ui.theme.gray666
-import com.example.androiddevchallenge.ui.theme.gray999
 import com.example.androiddevchallenge.ui.theme.typography
 import kotlinx.coroutines.launch
 
-class DetailActivity: AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
 
     lateinit var viewModel: DetailViewModel
 
@@ -73,28 +70,25 @@ class DetailActivity: AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         setContent {
             MyTheme(darkTheme = false) {
-                MyApp(intent.getSerializableExtra("data") as Puppy, onBackPressed = {
-                    onBackPressed()
-                }, viewModel)
+                MyApp(
+                    intent.getSerializableExtra("data") as Puppy,
+                    onBackPressed = {
+                        onBackPressed()
+                    },
+                    viewModel
+                )
             }
-
-
         }
     }
-
-
-
 
     companion object {
         fun newIntent(context: Context, puppy: Puppy) = Intent(context, DetailActivity::class.java).apply {
             putExtra("data", puppy)
         }
     }
-
-
 }
 
-class DetailViewModel: ViewModel() {
+class DetailViewModel : ViewModel() {
 
     val _isAdopt = MutableLiveData(false)
 
@@ -131,8 +125,7 @@ fun MyApp(puppy: Puppy, onBackPressed: () -> Unit, viewModel: DetailViewModel) {
                 )
             }
         }
-        ) {
-
+    ) {
 
         Surface(
             Modifier
@@ -146,7 +139,8 @@ fun MyApp(puppy: Puppy, onBackPressed: () -> Unit, viewModel: DetailViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.size(10.dp))
-                Image(painter = painterResource(id = puppy.img), "",
+                Image(
+                    painter = painterResource(id = puppy.img), "",
                     Modifier
                         .size(80.dp, 80.dp)
                         .clip(RoundedCornerShape(50))
@@ -179,7 +173,6 @@ fun MyApp(puppy: Puppy, onBackPressed: () -> Unit, viewModel: DetailViewModel) {
                         scope.launch {
                             scaffoldState.snackbarHostState.showSnackbar("adopt successful!")
                         }
-
                     },
                     enabled = !adopt
                 ) {
@@ -187,7 +180,6 @@ fun MyApp(puppy: Puppy, onBackPressed: () -> Unit, viewModel: DetailViewModel) {
                 }
             }
         }
-
     }
 }
 
@@ -212,4 +204,3 @@ fun getTopBar(title: String, onBackPressed: () -> Unit) {
         }
     )
 }
-
