@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,13 +39,16 @@ import androidx.compose.ui.unit.sp
 import com.example.androiddevchallenge.model.Puppy
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.ui.theme.matcha
+import com.example.androiddevchallenge.ui.theme.typography
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyTheme {
-                MyApp()
+            MyTheme(darkTheme = false) {
+                MyApp { puppy ->
+                    startActivity(DetailActivity.newIntent(this, puppy))
+                }
             }
         }
     }
@@ -52,26 +56,22 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Scaffold(
-            Modifier
-                .background(color = MaterialTheme.colors.background)
-                .fillMaxSize(),
-            topBar = {
-                getTopBar(title = "Puppy")
-            },
+fun MyApp(onSelected: (Puppy) -> Unit) {
+    Scaffold(
+        Modifier
+            .background(color = MaterialTheme.colors.background)
+            .fillMaxSize(),
+        backgroundColor = MaterialTheme.colors.primaryVariant,
+        topBar = {
+            getTopBar(title = "Puppy Adoption")
+        },
 
         ) {
-            Feed(feedItems = arrayListOf(
-                Puppy("Puppy", "", "", "", "2021/3/1"),
-                Puppy("Puppy", "", "", "", "2021/3/1"),
-                Puppy("Puppy", "", "", "", "2021/3/1"),
-                Puppy("Puppy", "", "", "", "2021/3/1")
-            ), onSelected = { /*TODO*/ })
-        }
-
-
+        Feed(feedItems = arrayListOf(
+            Puppy("Harry", "unknown", "Active and cheerful", R.drawable.puppy1, "2021/3/1"),
+            Puppy("Jerry", "Kirky", "Lively and sticky", R.drawable.puppy2, "2021/2/19"),
+            Puppy("Katrina", "Husky", "Meekness", R.drawable.puppy3, "2021/2/1")
+        ), onSelected = onSelected)
     }
 }
 
@@ -81,8 +81,7 @@ fun getTopBar(title: String) {
         title = {
             Text(title)
         },
-        Modifier.fillMaxWidth(),
-        backgroundColor = matcha)
+        Modifier.fillMaxWidth())
 }
 
 @Composable
@@ -116,11 +115,17 @@ fun PuppyItem(puppy: Puppy, onSelected: (Puppy) -> Unit) {
             .fillMaxWidth()
     ) {
         Column() {
-            Text(text = puppy.name, fontSize = 16.sp, color = Color.Black)
+//            Text(text = puppy.name, fontSize = 16.sp, color = Color.Black)
+            Text(text = puppy.name, color = Color.Black, style = typography.body1)
             Spacer(Modifier.size(6.dp))
-            Text(text = puppy.createTime, fontSize = 12.sp, color = Color.Gray)
+            Text(text = "${puppy.createTime} release", fontSize = 12.sp, color = Color.Gray)
             Spacer(Modifier.size(6.dp))
-            Image(painter = painterResource(id = R.drawable.img1), "")
+            Image(
+                painter = painterResource(id = puppy.img),
+                "",
+                Modifier.height(200.dp),
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
@@ -130,7 +135,9 @@ fun PuppyItem(puppy: Puppy, onSelected: (Puppy) -> Unit) {
 @Composable
 fun LightPreview() {
     MyTheme {
-        MyApp()
+        MyApp { puppy ->
+
+        }
     }
 }
 
@@ -138,6 +145,8 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
-        MyApp()
+        MyApp{ puppy ->
+
+        }
     }
 }

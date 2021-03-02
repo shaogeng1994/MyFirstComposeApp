@@ -1,3 +1,6 @@
 package com.example.androiddevchallenge.model
 
-data class Puppy(var name: String, var varieties: String, var character: String, var img: String, var createTime: String)
+import androidx.annotation.DrawableRes
+import java.io.Serializable
+
+data class Puppy(var name: String, var varieties: String, var character: String, @DrawableRes var img: Int, var createTime: String): Serializable
