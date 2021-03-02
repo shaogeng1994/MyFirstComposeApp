@@ -7,11 +7,13 @@
 
 ## :scroll: Description
 <!--- Describe your app in one or two sentences -->
+### This is an app for adopting puppies,for the #AndroidDevChallenge of Jetpack Compose.
 
 
 ## :bulb: Motivation and Context
 <!--- Optionally point readers to interesting parts of your submission. -->
 <!--- What are you especially proud of? -->
+### This is my first app to use composition,learning Compose and LiveData while finishing this app.
 
 
 ## :camera_flash: Screenshots
